@@ -10,7 +10,7 @@ Required environment:
 | `KEYCLOAK_USER`       | Admin user name (usually `admin`) |
 | `KEYCLOAK_PASSWORD`   | Admin password                    |
 
-By default, those values will be obtained from secret `keycloak` in `system` namespace.
+By default, those values will be obtained from secret `keycloak` in `keycloak` namespace.
 
 ## Description
 

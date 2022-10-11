@@ -18,7 +18,7 @@ spec:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: KeycloakClient is the Schema for the keycloakclients API
+        description: KeycloakClient is the Schema for the Keycloak Clients
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -43,7 +43,7 @@ spec:
                 type: string
               secretName:
                 description: 'Secret name where to store credentials. Contains: clientID,
-                  clientSecret, discoveryURL, realmURL'
+                  clientSecret, realm, discoveryURL, realmURL'
                 type: string
             required:
             - domain

@@ -33,7 +33,7 @@ type KeycloakClientSpec struct {
 	// Domain which will be used for redirect callback.
 	Domain string `json:"domain"`
 	// Secret name where to store credentials.
-	// Contains: clientID, clientSecret, discoveryURL, realmURL
+	// Contains: clientID, clientSecret, realm, discoveryURL, realmURL
 	SecretName string `json:"secretName"`
 }
 
@@ -46,7 +46,7 @@ type KeycloakClientStatus struct {
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// KeycloakClient is the Schema for the keycloakclients API
+// KeycloakClient is the Schema for the Keycloak Clients
 type KeycloakClient struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
