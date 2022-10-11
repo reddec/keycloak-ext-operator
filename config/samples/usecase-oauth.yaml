@@ -1,0 +1,92 @@
+---
+apiVersion: keycloak.k8s.reddec.net/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: sample
+  namespace: default
+spec:
+  secretName: "echo-secret"
+  domain: "echo.example.com"
+  realm: example
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echo
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: echo.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: echo
+                port:
+                  number: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: echo
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+        - name: dump
+          image: daime/http-dump:latest
+
+        - name: oauth-proxy
+          image: quay.io/oauth2-proxy/oauth2-proxy:latest
+          env:
+            - name: OAUTH2_PROXY_HTTP_ADDRESS
+              value: 0.0.0.0:8081
+            - name: OAUTH2_PROXY_UPSTREAMS
+              value: http://127.0.0.1:8080
+            - name: OAUTH2_PROXY_EMAIL_DOMAINS
+              value: "*"
+            - name: OAUTH2_PROXY_REVERSE_PROXY
+              value: "true"
+            - name: OAUTH2_PROXY_PROVIDER
+              value: oidc
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              value: "ooyacaewo9ooZeG0faiCu9Joo3Queiho" # for example only
+            - name: OAUTH2_PROXY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: echo-secret
+                  key: clientID
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: echo-secret
+                  key: clientSecret
+            - name: OAUTH2_PROXY_OIDC_ISSUER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: echo-secret
+                  key: realmURL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "echo"
+  namespace: default
+spec:
+  ports:
+    - name: echo
+      port: 80
+      targetPort: 8081
+  selector:
+    app: "echo"

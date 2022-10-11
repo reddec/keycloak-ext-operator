@@ -94,6 +94,10 @@ data:
 
 * Create manifests
 
+## Use-cases
+
+- [oauth2-proxy protection](config/samples/usecase-oauth.yaml) for deployment
+
 ## License
 
 Copyright 2022.
