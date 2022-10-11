@@ -27,3 +27,4 @@ testbin/*
 /secrets.yaml
 /build
 /.bin
+dist/

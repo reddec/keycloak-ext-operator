@@ -63,7 +63,22 @@ data:
 ## Getting Started
 
 * Install operator
+
+```bash
+curl -L https://github.com/reddec/keycloak-ext-operator/releases/latest/download/keycloak-ext-operator.yaml | \
+kubectl apply -f -
+```
+
 * Setup credentials
+
+```bash
+kubectl -n keycloak create secret generic keycloak
+kubectl -n keycloak edit secret keycloak
+```
+
+> values in `data` should be base64 encoded - see [kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
+
+* Create manifests
 
 ## License
 

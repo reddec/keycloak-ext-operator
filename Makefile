@@ -1,6 +1,6 @@
 GIT_TAG := $(shell git tag --points-at HEAD)
 VERSION ?= $(shell echo $${GIT_TAG:-0.0.0} | sed s/v//g)
-IMAGE := gchr.io/reddec/keycloak-ext-operator:$(VERSION)
+IMAGE ?= gchr.io/reddec/keycloak-ext-operator:$(VERSION)
 LOCALBIN := $(PWD)/.bin
 CONTROLLER_GEN := $(LOCALBIN)/controller-gen
 
@@ -19,6 +19,11 @@ generate: $(CONTROLLER_GEN) ## Generate code containing DeepCopy, DeepCopyInto, 
 run: manifests generate
 	direnv exec . go run ./main.go
 
+install: manifests generate
+	kubectl apply -k config/crd
+
+.PHONY: install
+
 bundle: manifests generate
 	rm -rf build && mkdir build
 	cp -rv config ./build/
@@ -27,6 +32,9 @@ bundle: manifests generate
 	rm -rf build/config
 
 .PHONY: bundle
+
+install:
+	goreleaser build --rm-dist --snapshot --single-target
 
 $(CONTROLLER_GEN):
 	@mkdir -p $(LOCALBIN)
