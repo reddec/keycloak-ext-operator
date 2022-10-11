@@ -1,0 +1,7 @@
+resources:
+  - bases/keycloak.k8s.reddec.net_keycloakclients.yaml
+#+kubebuilder:scaffold:crdkustomizeresource
+
+# the following config is for teaching kustomize how to do kustomization for CRDs.
+configurations:
+  - kustomizeconfig.yaml

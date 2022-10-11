@@ -1,0 +1,195 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+    operators.operatorframework.io/builder: operator-sdk-v1.23.0
+    operators.operatorframework.io/project_layout: go.kubebuilder.io/v3
+  name: keycloak-ext-operator.v0.0.1
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: KeycloakClient is the Schema for the keycloakclients API
+      displayName: Keycloak Client
+      kind: KeycloakClient
+      name: keycloakclients.keycloak.k8s.reddec.net
+      version: v1alpha1
+  description: Creates OAuth clients in Keycloak and creates corresponding secrets
+    in kubernetes
+  displayName: keycloak-ext-operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      clusterPermissions:
+      - rules:
+        - apiGroups:
+          - keycloak.k8s.reddec.net
+          resources:
+          - keycloakclients
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - keycloak.k8s.reddec.net
+          resources:
+          - keycloakclients/finalizers
+          verbs:
+          - update
+        - apiGroups:
+          - keycloak.k8s.reddec.net
+          resources:
+          - keycloakclients/status
+          verbs:
+          - get
+          - patch
+          - update
+        - apiGroups:
+          - authentication.k8s.io
+          resources:
+          - tokenreviews
+          verbs:
+          - create
+        - apiGroups:
+          - authorization.k8s.io
+          resources:
+          - subjectaccessreviews
+          verbs:
+          - create
+        serviceAccountName: keycloak-ext-operator-controller-manager
+      deployments:
+      - label:
+          control-plane: controller-manager
+        name: keycloak-ext-operator-controller-manager
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              control-plane: controller-manager
+          strategy: {}
+          template:
+            metadata:
+              annotations:
+                kubectl.kubernetes.io/default-container: manager
+              labels:
+                control-plane: controller-manager
+            spec:
+              containers:
+              - args:
+                - --leader-elect
+                command:
+                - /manager
+                env:
+                - name: KEYCLOAK_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: KEYCLOAK_URL
+                      name: keycloak
+                - name: KEYCLOAK_USER
+                  valueFrom:
+                    secretKeyRef:
+                      key: KEYCLOAK_USER
+                      name: keycloak
+                - name: KEYCLOAK_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: KEYCLOAK_PASSWORD
+                      name: keycloak
+                image: controller:latest
+                livenessProbe:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+                  initialDelaySeconds: 15
+                  periodSeconds: 20
+                name: manager
+                readinessProbe:
+                  httpGet:
+                    path: /readyz
+                    port: 8081
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 128Mi
+                  requests:
+                    cpu: 10m
+                    memory: 64Mi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                    - ALL
+              securityContext:
+                runAsNonRoot: true
+              serviceAccountName: keycloak-ext-operator-controller-manager
+              terminationGracePeriodSeconds: 10
+      permissions:
+      - rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - coordination.k8s.io
+          resources:
+          - leases
+          verbs:
+          - get
+          - list
+          - watch
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - events
+          verbs:
+          - create
+          - patch
+        serviceAccountName: keycloak-ext-operator-controller-manager
+    strategy: deployment
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - keycloak
+  - oidc
+  - oauth
+  links:
+  - name: Keycloak Ext Operator
+    url: https://keycloak-ext-operator.domain
+  maintainers:
+  - email: owner@reddec.net
+    name: RedDec
+  maturity: alpha
+  provider:
+    name: reddec.net
+    url: https://github.com/reddec/keycloak-ext-operator
+  version: 0.0.1

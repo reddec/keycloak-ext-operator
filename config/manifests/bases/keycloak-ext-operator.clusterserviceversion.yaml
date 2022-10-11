@@ -1,0 +1,51 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+  name: keycloak-ext-operator.v0.0.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: KeycloakClient is the Schema for the keycloakclients API
+      displayName: Keycloak Client
+      kind: KeycloakClient
+      name: keycloakclients.keycloak.k8s.reddec.net
+      version: v1alpha1
+  description: Creates OAuth clients in Keycloak and creates corresponding secrets
+    in kubernetes
+  displayName: keycloak-ext-operator
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments: null
+    strategy: ""
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - keycloak
+  - oidc
+  - oauth
+  links:
+  - name: Keycloak Ext Operator
+    url: https://keycloak-ext-operator.domain
+  maintainers:
+  - email: owner@reddec.net
+    name: RedDec
+  maturity: alpha
+  provider:
+    name: reddec.net
+    url: https://github.com/reddec/keycloak-ext-operator
+  version: 0.0.0

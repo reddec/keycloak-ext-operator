@@ -1,0 +1,7 @@
+namespace: keycloak
+namePrefix: keycloak-ext-operator-
+
+bases:
+- ../crd
+- ../rbac
+- ../manager

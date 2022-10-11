@@ -1,0 +1,24 @@
+# permissions for end users to edit keycloakclients.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: keycloakclient-editor-role
+rules:
+- apiGroups:
+  - keycloak.k8s.reddec.net
+  resources:
+  - keycloakclients
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - keycloak.k8s.reddec.net
+  resources:
+  - keycloakclients/status
+  verbs:
+  - get

@@ -1,0 +1,8 @@
+apiVersion: keycloak.k8s.reddec.net/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: keycloakclient-sample
+spec:
+  secretName: "oauth"
+  domain: "example.com"
+  realm: reddec

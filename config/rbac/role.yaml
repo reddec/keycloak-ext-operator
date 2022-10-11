@@ -1,0 +1,33 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - keycloak.k8s.reddec.net
+  resources:
+  - keycloakclients
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - keycloak.k8s.reddec.net
+  resources:
+  - keycloakclients/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - keycloak.k8s.reddec.net
+  resources:
+  - keycloakclients/status
+  verbs:
+  - get
+  - patch
+  - update
