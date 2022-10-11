@@ -1,7 +1,7 @@
 GIT_TAG := $(shell git tag --points-at HEAD)
 VERSION ?= $(shell echo $${GIT_TAG:-0.0.0} | sed s/v//g)
 IMAGE ?= gchr.io/reddec/keycloak-ext-operator:$(VERSION)
-LOCALBIN := $(PWD)/.bin
+LOCALBIN := $(shell pwd)/.bin
 CONTROLLER_GEN := $(LOCALBIN)/controller-gen
 
 info:
