@@ -45,7 +45,7 @@ Generated secret
 apiVersion: v1
 kind: Secret
 metadata:
-  name: oauth
+  name: my-secret
   namespace: default
 immutable: true
 type: Opaque
