@@ -78,6 +78,20 @@ kubectl -n keycloak edit secret keycloak
 
 > values in `data` should be base64 encoded - see [kubernetes secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
 
+example
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: keycloak
+  namespace: keycloak
+data:
+  KEYCLOAK_URL: aHR0cHM6Ly9leGFtcGxlLmNvbQ==
+  KEYCLOAK_USER: YWRtaW4=
+  KEYCLOAK_PASSWORD: UEAkJHdvckQ=
+```
+
 * Create manifests
 
 ## License
