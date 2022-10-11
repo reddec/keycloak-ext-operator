@@ -1,6 +1,6 @@
 before:
   hooks:
-    - make bundle
+    - make bundle VERSION={{ .Version }}
 builds:
   - env:
       - CGO_ENABLED=0
