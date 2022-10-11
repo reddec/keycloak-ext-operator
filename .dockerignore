@@ -5,3 +5,4 @@ testbin/
 .env
 /build
 /.bin
+*secrets.yaml

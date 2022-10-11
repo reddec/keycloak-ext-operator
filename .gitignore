@@ -24,7 +24,8 @@ testbin/*
 *.swo
 *~
 .env
-/secrets.yaml
+*secrets.yaml
 /build
 /.bin
 dist/
+/local
