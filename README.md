@@ -39,6 +39,8 @@ spec:
   realm: reddec
 ```
 
+- `secretName` is optional. If it is not set, then the name of CRD (`sample` in this case) will be used.
+
 Generated secret
 
 ```yaml

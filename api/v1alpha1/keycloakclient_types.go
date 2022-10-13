@@ -32,9 +32,9 @@ type KeycloakClientSpec struct {
 	Realm string `json:"realm"`
 	// Domain which will be used for redirect callback.
 	Domain string `json:"domain"`
-	// Secret name where to store credentials.
+	// Secret name where to store credentials. Optional, if not set - CRD name will be used.
 	// Contains: clientID, clientSecret, realm, discoveryURL, realmURL
-	SecretName string `json:"secretName"`
+	SecretName string `json:"secretName,omitempty"`
 }
 
 // KeycloakClientStatus defines the observed state of KeycloakClient
@@ -53,6 +53,13 @@ type KeycloakClient struct {
 
 	Spec   KeycloakClientSpec   `json:"spec,omitempty"`
 	Status KeycloakClientStatus `json:"status,omitempty"`
+}
+
+func (in *KeycloakClient) SecretName() string {
+	if manual := in.Spec.SecretName; manual != "" {
+		return manual
+	}
+	return in.Name
 }
 
 //+kubebuilder:object:root=true

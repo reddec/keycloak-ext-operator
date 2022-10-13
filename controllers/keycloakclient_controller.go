@@ -50,6 +50,7 @@ const keycloakFinalizer = "reddec.net.k8s.keycloak-finalizer"
 //+kubebuilder:rbac:groups=keycloak.k8s.reddec.net,resources=keycloakclients,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=keycloak.k8s.reddec.net,resources=keycloakclients/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=keycloak.k8s.reddec.net,resources=keycloakclients/finalizers,verbs=update
+//+kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch;create;update;patch;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -83,7 +84,7 @@ func (r *KeycloakClientReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, nil
 	}
 
-	// add finalizer (to cleanup Keycloak client)
+	// add finalizer (to clean up Keycloak client)
 	if !controllerutil.ContainsFinalizer(clientSpec, keycloakFinalizer) {
 		controllerutil.AddFinalizer(clientSpec, keycloakFinalizer)
 		if err := r.Update(ctx, clientSpec); err != nil {
@@ -130,7 +131,7 @@ func (r *KeycloakClientReconciler) SetupWithManager(mgr ctrl.Manager) error {
 
 func (r *KeycloakClientReconciler) getOrCreateSecret(ctx context.Context, info *internal.ClientDetails, clientSpec *keycloakv1alpha1.KeycloakClient) (*v12.Secret, error) {
 	found := &v12.Secret{}
-	err := r.Get(ctx, types.NamespacedName{Name: clientSpec.Spec.SecretName, Namespace: clientSpec.Namespace}, found)
+	err := r.Get(ctx, types.NamespacedName{Name: clientSpec.SecretName(), Namespace: clientSpec.Namespace}, found)
 	if err == nil {
 		return found, nil
 	}
@@ -143,7 +144,7 @@ func (r *KeycloakClientReconciler) getOrCreateSecret(ctx context.Context, info *
 func (r *KeycloakClientReconciler) createSecret(ctx context.Context, info *internal.ClientDetails, manifest *keycloakv1alpha1.KeycloakClient) (*v12.Secret, error) {
 	sec := &v12.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      manifest.Spec.SecretName,
+			Name:      manifest.SecretName(),
 			Namespace: manifest.Namespace,
 			Labels: map[string]string{
 				"keycloak-cr": manifest.Name,

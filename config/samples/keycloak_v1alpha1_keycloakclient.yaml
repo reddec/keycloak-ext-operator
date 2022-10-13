@@ -3,6 +3,6 @@ kind: KeycloakClient
 metadata:
   name: keycloakclient-sample
 spec:
-  secretName: "oauth"
+  secretName: "oauth" # optional, if not set the CRD name will be used
   domain: "example.com"
   realm: reddec

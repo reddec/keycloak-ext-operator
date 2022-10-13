@@ -42,13 +42,13 @@ spec:
                 description: Realm name.
                 type: string
               secretName:
-                description: 'Secret name where to store credentials. Contains: clientID,
-                  clientSecret, realm, discoveryURL, realmURL'
+                description: 'Secret name where to store credentials. Optional, if
+                  not set - CRD name will be used. Contains: clientID, clientSecret,
+                  realm, discoveryURL, realmURL'
                 type: string
             required:
             - domain
             - realm
-            - secretName
             type: object
           status:
             description: KeycloakClientStatus defines the observed state of KeycloakClient
