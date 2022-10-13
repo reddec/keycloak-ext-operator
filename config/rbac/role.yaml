@@ -42,3 +42,4 @@ rules:
       - watch
       - delete
       - list
+      - create
