@@ -39,10 +39,13 @@ spec:
   realm: reddec
   annotations:
     foo: bar
+  labels:
+    alice: bob
 ```
 
 - `secretName` is optional. If it is not set, then the name of CRD (`sample` in this case) will be used.
 - `annotations` is optional. If set, all values will be copied to secret annotations.
+- `labels` is optional. If set, all values will be copied to secret labels.
 
 Generated secret
 

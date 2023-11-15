@@ -43,6 +43,11 @@ spec:
               domain:
                 description: Domain which will be used for redirect callback.
                 type: string
+              labels:
+                additionalProperties:
+                  type: string
+                description: Labels (optional) to add to the target secret
+                type: object
               realm:
                 description: Realm name.
                 type: string

@@ -142,14 +142,19 @@ func (r *KeycloakClientReconciler) getOrCreateSecret(ctx context.Context, info *
 }
 
 func (r *KeycloakClientReconciler) createSecret(ctx context.Context, info *internal.ClientDetails, manifest *keycloakv1alpha1.KeycloakClient) (*v12.Secret, error) {
+	var labels = map[string]string{
+		"keycloak-cr": manifest.Name,
+		"keycloak-id": info.ID,
+	}
+	for k, v := range manifest.Spec.Labels {
+		labels[k] = v
+	}
+
 	sec := &v12.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      manifest.SecretName(),
-			Namespace: manifest.Namespace,
-			Labels: map[string]string{
-				"keycloak-cr": manifest.Name,
-				"keycloak-id": info.ID,
-			},
+			Name:        manifest.SecretName(),
+			Namespace:   manifest.Namespace,
+			Labels:      labels,
 			Annotations: manifest.Spec.Annotations,
 		},
 		Immutable: proto.Bool(true),
@@ -184,6 +189,9 @@ func (r *KeycloakClientReconciler) updateSecret(ctx context.Context, secret *v12
 	secret.Labels = map[string]string{
 		"keycloak-cr": m.Name,
 		"keycloak-id": info.ID,
+	}
+	for k, v := range m.Spec.Labels {
+		secret.Labels[k] = v
 	}
 	secret.Data = map[string][]byte{
 		"clientID":     []byte(info.ClientID),

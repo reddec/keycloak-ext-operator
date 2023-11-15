@@ -37,6 +37,8 @@ type KeycloakClientSpec struct {
 	SecretName string `json:"secretName,omitempty"`
 	// Annotations (optional) to add to the target secret
 	Annotations map[string]string `json:"annotations,omitempty"`
+	// Labels (optional) to add to the target secret
+	Labels map[string]string `json:"labels,omitempty"`
 }
 
 // KeycloakClientStatus defines the observed state of KeycloakClient
