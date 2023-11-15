@@ -37,9 +37,12 @@ spec:
   secretName: "my-secret"
   domain: "example.com"
   realm: reddec
+  annotations:
+    foo: bar
 ```
 
 - `secretName` is optional. If it is not set, then the name of CRD (`sample` in this case) will be used.
+- `annotations` is optional. If set, all values will be copied to secret annotations.
 
 Generated secret
 

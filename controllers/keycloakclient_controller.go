@@ -150,6 +150,7 @@ func (r *KeycloakClientReconciler) createSecret(ctx context.Context, info *inter
 				"keycloak-cr": manifest.Name,
 				"keycloak-id": info.ID,
 			},
+			Annotations: manifest.Spec.Annotations,
 		},
 		Immutable: proto.Bool(true),
 		Data: map[string][]byte{
@@ -173,6 +174,12 @@ func (r *KeycloakClientReconciler) updateSecret(ctx context.Context, secret *v12
 	info, err := r.getOrCreateClient(ctx, string(m.UID), m)
 	if err != nil {
 		return fmt.Errorf("create client: %w", err)
+	}
+	if secret.Annotations == nil {
+		secret.Annotations = make(map[string]string)
+	}
+	for k, v := range m.Spec.Annotations {
+		secret.Annotations[k] = v
 	}
 	secret.Labels = map[string]string{
 		"keycloak-cr": m.Name,
@@ -249,4 +256,13 @@ func (r *KeycloakClientReconciler) removeClient(ctx context.Context, spec *keycl
 		return err
 	}
 	return kClient.Delete(ctx, spec.Spec.Realm, info.ID)
+}
+
+func includes(src map[string]string, subset map[string]string) bool {
+	for k, v := range subset {
+		if sv, ok := src[k]; !ok || sv != v {
+			return false
+		}
+	}
+	return true
 }

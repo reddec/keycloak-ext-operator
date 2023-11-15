@@ -35,6 +35,8 @@ type KeycloakClientSpec struct {
 	// Secret name where to store credentials. Optional, if not set - CRD name will be used.
 	// Contains: clientID, clientSecret, realm, discoveryURL, realmURL
 	SecretName string `json:"secretName,omitempty"`
+	// Annotations (optional) to add to the target secret
+	Annotations map[string]string `json:"annotations,omitempty"`
 }
 
 // KeycloakClientStatus defines the observed state of KeycloakClient
